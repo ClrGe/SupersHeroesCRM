@@ -11,4 +11,11 @@
       <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="21.2.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Update="images\logo.png">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>
