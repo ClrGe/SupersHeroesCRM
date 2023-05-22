@@ -5,22 +5,16 @@ using SupersHerosCRM.Models;
 
 namespace SupersHerosCRM.Controllers;
 
-public class HeroController : ControllerBase
+public class EventController: ControllerBase
 {
     private readonly SupersHerosCRMDbContext _context;
-    private readonly ILogger<HeroController> _logger;
+    private readonly ILogger<EventController> _logger;
 
-    public HeroController(SupersHerosCRMDbContext context, ILogger<HeroController> logger)
-    {
-        _context = context;
-        _logger = logger;
-    }
-
-    public async Task<IEnumerable<Hero>?> GetHeroesAsync()
+    public async Task<IEnumerable<Events>?> GetEventsAsync()
     {
         try
         {
-            return await _context.Heroes.ToListAsync();
+            return await _context.Events.ToListAsync();
         }
         catch (Exception ex)
         {
@@ -29,19 +23,19 @@ public class HeroController : ControllerBase
 
         return null;
     }
-
-    public async Task<Hero?> GetHeroAsync(int id, bool includeRelations = true)
+    
+    public async Task<Events?> GetEventAsync(int id, bool includeRelations = true)
     {
         try
         {
             if (includeRelations)
             {
-                return await _context.Heroes
-                    .Include(c => c.Incidents)
+                return await _context.Events
+                    .Include(c => c.Heroes)
                     .FirstOrDefaultAsync(c => c.Id == id);
             }
 
-            return await _context.Heroes.FindAsync(id);
+            return await _context.Events.FindAsync(id);
         }
         catch (Exception ex)
         {
@@ -50,14 +44,16 @@ public class HeroController : ControllerBase
 
         return null;
     }
-
-    public async Task<Hero?> AddHeroAsync(Hero hero)
+    
+    public async Task<Events?> AddEventAsync(Events events)
     {
         try
         {
-            _context.Heroes.Add(hero);
+            _context.Events.Add(events);
+            
+            
             await _context.SaveChangesAsync();
-            return hero;
+            return events;
         }
         catch (Exception ex)
         {
@@ -66,5 +62,6 @@ public class HeroController : ControllerBase
 
         return null;
     }
+    
     
 }

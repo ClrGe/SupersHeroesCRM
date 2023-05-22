@@ -94,7 +94,7 @@ button {
 
 .container {
   position: relative;
-  width: 320px;
+  width: 50vh;
   margin: 100px auto 0 auto;
   perspective: 1000px;
 }
@@ -199,3 +199,5 @@ input[type="submit"] {
   margin-bottom: 20px;
   text-transform: uppercase;
 }
+
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }

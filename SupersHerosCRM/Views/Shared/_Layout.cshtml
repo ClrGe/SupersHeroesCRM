@@ -4,6 +4,8 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - SupersHerosCRM</title>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/SupersHerosCRM.styles.css" asp-append-version="true"/>
@@ -23,10 +25,10 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Ajouter un Super Héro</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AddHero">Ajouter un Super Héro</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Trouver un Super Héro</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="FindHero">Trouver un Super Héro</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">À propos</a>
@@ -37,7 +39,29 @@
     </nav>
 </header>
 <div class="container">
-    <main role="main" class="pb-3">
+    <main role="main" class="pb-3">     <div id="map"></div>
+                                        <script>
+                                        	mapboxgl.accessToken = 'pk.eyJ1IjoiY2xhaXJnZSIsImEiOiJjbGdxNmtiNTkwNmRmM2pzM3drbnA5a3h5In0.akdkLqiIt0WArmknZwTNCw';
+                                            const map = new mapboxgl.Map({
+                                                container: 'map', // container ID
+                                                style: 'mapbox://styles/mapbox/streets-v12', // style URL
+                                                center: [-74.5, 40], // starting position [lng, lat]
+                                                zoom: 9 // starting zoom
+                                            });
+                                            const marker = new mapboxgl.Marker({
+                                            draggable: true
+                                            })
+                                            .setLngLat([0, 0])
+                                            .addTo(map);
+                                             
+                                            function onDragEnd() {
+                                            const lngLat = marker.getLngLat();
+                                            coordinates.style.display = 'block';
+                                            coordinates.innerHTML = `Longitude: ${lngLat.lng}<br />Latitude: ${lngLat.lat}`;
+                                            }
+                                             
+                                            marker.on('dragend', onDragEnd);
+                                        </script>
         @RenderBody()
     </main>
 </div>

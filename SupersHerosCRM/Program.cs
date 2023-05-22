@@ -1,7 +1,18 @@
+using SupersHerosCRM.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var connectionString = builder.Configuration.GetConnectionString("SupersHerosCRMDbContext") ??
+                       throw new InvalidOperationException("Connection string 'SupersHerosCRMDbContext' not found.");
+
+builder.Services.AddDbContext<SupersHerosCRMDbContext>(options =>
+    options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
+
+await SupersHerosCRMDbContext.EnsureDbCreatedAndSeedWithCountOfAsync(new DbContextOptions<SupersHerosCRMDbContext>() , 10);
 
 var app = builder.Build();
 
