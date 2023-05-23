@@ -1,20 +1,37 @@
-using SupersHerosCRM.Data;
 using Microsoft.EntityFrameworkCore;
+using SupersHerosCRM.Data;
+using SupersHerosCRM.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var connectionString = builder.Configuration.GetConnectionString("SupersHerosCRMDbContext") ??
-                       throw new InvalidOperationException("Connection string 'SupersHerosCRMDbContext' not found.");
+// Add our services
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IHeroService, HeroService>();
+
+
+var connectionString = builder.Configuration.GetConnectionString("DbKey") ??
+                       throw new InvalidOperationException("Connection string 'DbKey' not found.");
 
 builder.Services.AddDbContext<SupersHerosCRMDbContext>(options =>
     options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
 
-await SupersHerosCRMDbContext.EnsureDbCreatedAndSeedWithCountOfAsync(new DbContextOptions<SupersHerosCRMDbContext>() , 10);
+// create the database if it doesn't exist
+var db = builder.Services.BuildServiceProvider().GetService<SupersHerosCRMDbContext>();
+db.Database.EnsureCreated();
 
+// do the migration
+db.Database.Migrate();
+builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
+{
+    builder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+}));
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -24,6 +41,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -32,7 +51,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    "default",
+    "{controller=Home}/{action=Index}/{id?}");
 
+app.UseCors("AllowAll");
 app.Run();

@@ -14,7 +14,7 @@
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container-fluid">
-    <img src="~/images/logo.png" alt="Logo" class="logo">
+            <img src="~/images/logo.png" alt="Logo" class="logo">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -39,8 +39,9 @@
     </nav>
 </header>
 <div class="container">
-    <main role="main" class="pb-3">     <div id="map"></div>
-                                        <script>
+    <main role="main" class="pb-3">
+        <div id="map"></div>
+        <script>
                                         	mapboxgl.accessToken = 'pk.eyJ1IjoiY2xhaXJnZSIsImEiOiJjbGdxNmtiNTkwNmRmM2pzM3drbnA5a3h5In0.akdkLqiIt0WArmknZwTNCw';
                                             const map = new mapboxgl.Map({
                                                 container: 'map', // container ID
@@ -74,6 +75,6 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+@await RenderSectionAsync("Scripts", false)
 </body>
 </html>

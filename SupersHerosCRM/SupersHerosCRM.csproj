@@ -7,24 +7,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="EFCore.NamingConventions" Version="7.0.2" />
-      <PackageReference Include="EntityFramework" Version="6.4.4" />
-      <PackageReference Include="leaflet" Version="0.7.3" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="7.0.5" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
-      <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="21.2.5" />
+        <PackageReference Include="EFCore.NamingConventions" Version="7.0.2" />
+        <PackageReference Include="EntityFramework" Version="6.4.4" />
+        <PackageReference Include="leaflet" Version="0.7.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="7.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
+        <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="21.2.5" />
     </ItemGroup>
 
     <ItemGroup>
-      <Content Update="images\logo.png">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
+        <Content Update="images\logo.png">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>

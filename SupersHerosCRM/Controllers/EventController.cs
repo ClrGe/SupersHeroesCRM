@@ -2,66 +2,52 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupersHerosCRM.Data;
 using SupersHerosCRM.Models;
+using SupersHerosCRM.Services;
 
 namespace SupersHerosCRM.Controllers;
 
-public class EventController: ControllerBase
+[ApiController]
+[Route("api/[controller]")]
+public class EventController : ControllerBase
 {
-    private readonly SupersHerosCRMDbContext _context;
-    private readonly ILogger<EventController> _logger;
-
-    public async Task<IEnumerable<Events>?> GetEventsAsync()
+    private readonly IEventService _eventService;
+    
+    public EventController(IEventService eventService)
     {
-        try
-        {
-            return await _context.Events.ToListAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.Log(LogLevel.Information, ex.ToString());
-        }
-
-        return null;
+        _eventService = eventService;
     }
     
-    public async Task<Events?> GetEventAsync(int id, bool includeRelations = true)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetEventAsync(int id)
     {
-        try
-        {
-            if (includeRelations)
-            {
-                return await _context.Events
-                    .Include(c => c.Heroes)
-                    .FirstOrDefaultAsync(c => c.Id == id);
-            }
-
-            return await _context.Events.FindAsync(id);
-        }
-        catch (Exception ex)
-        {
-            _logger.Log(LogLevel.Information, ex.ToString());
-        }
-
-        return null;
+        var dbEvent = await _eventService.GetEventAsync(id);
+        
+        if (dbEvent == null) return StatusCode(StatusCodes.Status404NotFound, $"No Event found for id: {id}");
+        Response.Headers.Add("Access-Control-Allow-Origin", "*");
+        
+        return StatusCode(StatusCodes.Status200OK, dbEvent);
     }
     
-    public async Task<Events?> AddEventAsync(Events events)
+    [HttpGet]
+    public async Task<IActionResult> GetEventsAsync()
     {
-        try
-        {
-            _context.Events.Add(events);
-            
-            
-            await _context.SaveChangesAsync();
-            return events;
-        }
-        catch (Exception ex)
-        {
-            _logger.Log(LogLevel.Information, ex.ToString());
-        }
+        var dbEvents = await _eventService.GetEventsAsync();
 
-        return null;
+        if (dbEvents == null) return StatusCode(StatusCodes.Status404NotFound, "No events in database");
+        Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+        return StatusCode(StatusCodes.Status200OK, dbEvents);
     }
     
+    [HttpPost]
+    public async Task<ActionResult<Events>> AddEvent(Events eventToAdd)
+    {
+        Events? dbEvent = await _eventService.AddEventAsync(eventToAdd);
+
+        if (dbEvent == null)
+            return StatusCode(StatusCodes.Status404NotFound, $"{eventToAdd} could not be added.");
+
+        return StatusCode(StatusCodes.Status201Created, dbEvent);
+    }
     
 }

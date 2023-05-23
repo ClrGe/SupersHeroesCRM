@@ -1,6 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace SupersHerosCRM.Controllers;
 
-public class CityController
+public class CityController : ControllerBase
 {
-    
 }

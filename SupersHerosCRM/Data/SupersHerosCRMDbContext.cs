@@ -5,20 +5,25 @@ namespace SupersHerosCRM.Data;
 
 public class SupersHerosCRMDbContext : DbContext
 {
+    
+    // create the database 
+    public SupersHerosCRMDbContext()
+    {
+        Database.EnsureCreated();
+    }
+    
+    public SupersHerosCRMDbContext(DbContextOptions<SupersHerosCRMDbContext> options) : base(options)
+    {
+        
+
+    }
+    
 
     public virtual DbSet<Hero> Heroes { get; set; }
 
     public virtual DbSet<Incident> Incidents { get; set; }
-    
+
     public virtual DbSet<Events> Events { get; set; }
-    
-    
-
-
-    public SupersHerosCRMDbContext(DbContextOptions<SupersHerosCRMDbContext> options) : base(options)
-    {
-        
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -48,19 +53,20 @@ public class SupersHerosCRMDbContext : DbContext
             entity.HasData(new Incident { Id = 9, Title = "Braquage" });
             entity.HasData(new Incident { Id = 10, Title = "Evasion d’un prisonnier" });
         });
-        
-        modelBuilder.Entity<Events>(entity =>
+
+        /*modelBuilder.Entity<Events>(entity =>
         {
             entity.ToTable("Currents");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.HasIndex(e => e.Id);
             entity.HasOne(e => e.Incident);
-            
-            
+            entity.Property(e => e.Status).HasDefaultValue("active");
+            entity.Property(t => t.CreatedAt).HasPrecision(0).ValueGeneratedOnAdd().HasDefaultValueSql("NOW()");
+
+
             // add date in the Currents table
-            
-        });
+        });*/
     }
 
 
@@ -70,12 +76,13 @@ public class SupersHerosCRMDbContext : DbContext
         var factory = new LoggerFactory();
         var builder = new DbContextOptionsBuilder<SupersHerosCRMDbContext>(options)
             .UseLoggerFactory(factory);
+        
+        
 
         await using var context = new SupersHerosCRMDbContext(builder.Options);
+        var created = await context.Database.EnsureCreatedAsync();
+        
+            
         // result is true if the database had to be created
-
-
-
     }
 }
-
