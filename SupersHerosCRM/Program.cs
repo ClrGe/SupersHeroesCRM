@@ -5,7 +5,8 @@ using SupersHerosCRM.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+//builder.Services.AddControllersWithViews();
+builder.Services.AddControllers();
 
 // Add our services
 builder.Services.AddScoped<IEventService, EventService>();

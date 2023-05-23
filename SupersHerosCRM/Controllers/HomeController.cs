@@ -13,25 +13,25 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
-    {
-        return View();
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    public IActionResult AddHero()
-    {
-        return View();
-    }
-
-    public IActionResult FindHero()
-    {
-        return View();
-    }
+    // public IActionResult Index()
+    // {
+    //     return View();
+    // }
+    //
+    // public IActionResult Privacy()
+    // {
+    //     return View();
+    // }
+    //
+    // public IActionResult AddHero()
+    // {
+    //     return View();
+    // }
+    //
+    // public IActionResult FindHero()
+    // {
+    //     return View();
+    // }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
