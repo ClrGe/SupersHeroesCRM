@@ -23,7 +23,7 @@ public class SupersHerosCRMDbContext : DbContext
 
     public virtual DbSet<Incident> Incidents { get; set; }
 
-    public virtual DbSet<Events> Events { get; set; }
+    public virtual DbSet<Event> Events { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -54,19 +54,26 @@ public class SupersHerosCRMDbContext : DbContext
             entity.HasData(new Incident { Id = 10, Title = "Evasion d’un prisonnier" });
         });
 
-        /*modelBuilder.Entity<Events>(entity =>
+        modelBuilder.Entity<Event>(entity =>
         {
-            entity.ToTable("Currents");
+            entity.ToTable("Events");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.HasIndex(e => e.Id);
             entity.HasOne(e => e.Incident);
-            entity.Property(e => e.Status).HasDefaultValue("active");
+            entity.Property(e => e.IncidentId);
+            // location
+            entity.Property(e => e.City);
+            entity.Property(e => e.Longitude).IsRequired();
+            entity.Property(e => e.Latitude).IsRequired();
+            entity.Property(e => e.Status).HasDefaultValue("pending");
+            // hero 
+            entity.Property(e => e.HeroId);
             entity.Property(t => t.CreatedAt).HasPrecision(0).ValueGeneratedOnAdd().HasDefaultValueSql("NOW()");
 
 
             // add date in the Currents table
-        });*/
+        });
     }
 
 

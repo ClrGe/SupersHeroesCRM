@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 //builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
+builder.Services.AddSwaggerGen();
 
 // Add our services
 builder.Services.AddScoped<IEventService, EventService>();
@@ -42,7 +43,16 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+    options.RoutePrefix = string.Empty;
+});
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

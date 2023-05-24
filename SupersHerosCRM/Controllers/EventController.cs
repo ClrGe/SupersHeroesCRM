@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupersHerosCRM.Data;
@@ -39,10 +40,12 @@ public class EventController : ControllerBase
         return StatusCode(StatusCodes.Status200OK, dbEvents);
     }
     
-    [HttpPost]
-    public async Task<ActionResult<Events>> AddEvent(Events eventToAdd)
+    [HttpPost("Add")]
+    // accept all origin to prevent CORS error
+    [EnableCors("AllowAll")]    
+    public async Task<ActionResult<Event>> AddEvent(Event eventToAdd)
     {
-        Events? dbEvent = await _eventService.AddEventAsync(eventToAdd);
+        Event? dbEvent = await _eventService.AddEventAsync(eventToAdd);
 
         if (dbEvent == null)
             return StatusCode(StatusCodes.Status404NotFound, $"{eventToAdd} could not be added.");

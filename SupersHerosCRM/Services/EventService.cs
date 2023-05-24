@@ -10,7 +10,12 @@ public class EventService : IEventService
     private readonly SupersHerosCRMDbContext _context;
     private readonly ILogger<EventController> _logger;
 
-    public async Task<IEnumerable<Events>?> GetEventsAsync()
+    public EventService(SupersHerosCRMDbContext context, ILogger<EventController> logger)
+    {
+        _context = context;
+        _logger = logger;
+    }
+    public async Task<IEnumerable<Event>?> GetEventsAsync()
     {
         try
         {
@@ -24,7 +29,7 @@ public class EventService : IEventService
         return null;
     }
 
-    public async Task<Events?> GetEventAsync(int id, bool includeRelations = true)
+    public async Task<Event?> GetEventAsync(int id, bool includeRelations = true)
     {
         try
         {
@@ -43,15 +48,15 @@ public class EventService : IEventService
         return null;
     }
 
-    public async Task<Events?> AddEventAsync(Events events)
+    public async Task<Event?> AddEventAsync(Event @event)
     {
         try
         {
-            _context.Events.Add(events);
+            _context.Events.Add(@event);
 
 
             await _context.SaveChangesAsync();
-            return events;
+            return @event;
         }
         catch (Exception ex)
         {
@@ -64,9 +69,9 @@ public class EventService : IEventService
 
 public interface IEventService
 {
-    Task<IEnumerable<Events>?> GetEventsAsync();
-    Task<Events?> GetEventAsync(int id, bool includeRelations = true);
-    Task<Events?> AddEventAsync(Events events);
+    Task<IEnumerable<Event>?> GetEventsAsync();
+    Task<Event?> GetEventAsync(int id, bool includeRelations = true);
+    Task<Event?> AddEventAsync(Event @event);
     
     
 }
