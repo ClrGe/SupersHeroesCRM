@@ -16,14 +16,13 @@ const marker = new mapboxgl.Marker({
     .addTo(map);
 
 
-
 // add a marker for each Hero from database
-        
-        for (var i = 0; i < heroes.length; i++) {
-            var marker = new mapboxgl.Marker()
-                .setLngLat([@Model.Heroitude, heroes[i].latitude])
-                .addTo(map);
-        }
+
+for (var i = 0; i < heroes.length; i++) {
+    var marker = new mapboxgl.Marker()
+        .setLngLat([@Model.Heroitude, heroes[i].latitude])
+        .addTo(map);
+}
 
 function onDragEnd() {
     const lngLat = marker.getLngLat();

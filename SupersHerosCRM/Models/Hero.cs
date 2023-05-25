@@ -16,5 +16,9 @@ public class Hero
 
     public double? Latitude { get; set; }
 
-    public ICollection<Incident>? Incidents { get; set; } = new List<Incident>();
+    [MaxLength(3)]
+    public int[]? IncidentId { get; set; }
+
+    public ICollection<Incident>? Incidents { get; set; }
+    public ICollection<Event>? Events { get; set; }
 }

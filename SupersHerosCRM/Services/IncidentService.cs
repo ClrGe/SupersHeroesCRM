@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using SupersHerosCRM.Controllers;
 using SupersHerosCRM.Data;
 using SupersHerosCRM.Models;
 
@@ -15,6 +14,7 @@ public class IncidentService : IIncidentService
         _context = context;
         _logger = logger;
     }
+
     public async Task<IEnumerable<Incident>?> GetIncidentsAsync()
     {
         try

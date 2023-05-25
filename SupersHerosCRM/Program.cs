@@ -22,7 +22,7 @@ builder.Services.AddDbContext<SupersHerosCRMDbContext>(options =>
 
 // create the database if it doesn't exist
 var db = builder.Services.BuildServiceProvider().GetService<SupersHerosCRMDbContext>();
-db.Database.EnsureCreated();
+//db.Database.EnsureCreated();
 
 // do the migration
 db.Database.Migrate();

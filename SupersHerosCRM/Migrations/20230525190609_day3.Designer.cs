@@ -12,8 +12,8 @@ using SupersHerosCRM.Data;
 namespace SupersHerosCRM.Migrations
 {
     [DbContext(typeof(SupersHerosCRMDbContext))]
-    [Migration("20230524123528_day2")]
-    partial class day2
+    [Migration("20230525190609_day3")]
+    partial class day3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,26 +25,64 @@ namespace SupersHerosCRM.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("EventIncident", b =>
+                {
+                    b.Property<int>("EventId")
+                        .HasColumnType("integer")
+                        .HasColumnName("event_id");
+
+                    b.Property<int>("IncidentId")
+                        .HasColumnType("integer")
+                        .HasColumnName("incident_id");
+
+                    b.HasKey("EventId", "IncidentId")
+                        .HasName("pk_event_incident");
+
+                    b.HasIndex("IncidentId")
+                        .HasDatabaseName("ix_event_incident_incident_id");
+
+                    b.ToTable("event_incident", (string)null);
+                });
+
+            modelBuilder.Entity("HeroEvent", b =>
+                {
+                    b.Property<int>("EventId")
+                        .HasColumnType("integer")
+                        .HasColumnName("event_id");
+
+                    b.Property<int>("HeroId")
+                        .HasColumnType("integer")
+                        .HasColumnName("hero_id");
+
+                    b.HasKey("EventId", "HeroId")
+                        .HasName("pk_hero_event");
+
+                    b.HasIndex("HeroId")
+                        .HasDatabaseName("ix_hero_event_hero_id");
+
+                    b.ToTable("hero_event", (string)null);
+                });
+
             modelBuilder.Entity("HeroIncident", b =>
                 {
-                    b.Property<int>("HeroesId")
+                    b.Property<int>("HeroId")
                         .HasColumnType("integer")
-                        .HasColumnName("heroes_id");
+                        .HasColumnName("hero_id");
 
-                    b.Property<int>("IncidentsId")
+                    b.Property<int>("IncidentId")
                         .HasColumnType("integer")
-                        .HasColumnName("incidents_id");
+                        .HasColumnName("incident_id");
 
-                    b.HasKey("HeroesId", "IncidentsId")
+                    b.HasKey("HeroId", "IncidentId")
                         .HasName("pk_hero_incident");
 
-                    b.HasIndex("IncidentsId")
-                        .HasDatabaseName("ix_hero_incident_incidents_id");
+                    b.HasIndex("IncidentId")
+                        .HasDatabaseName("ix_hero_incident_incident_id");
 
                     b.ToTable("hero_incident", (string)null);
                 });
 
-            modelBuilder.Entity("SupersHerosCRM.Models.Events", b =>
+            modelBuilder.Entity("SupersHerosCRM.Models.Event", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,34 +91,49 @@ namespace SupersHerosCRM.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("City")
+                        .HasColumnType("text")
+                        .HasColumnName("city");
+
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(0)
+                        .HasColumnType("timestamp(0) with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.Property<int?>("HeroId")
+                        .HasColumnType("integer")
+                        .HasColumnName("hero_id");
 
                     b.Property<int>("IncidentId")
                         .HasColumnType("integer")
                         .HasColumnName("incident_id");
 
                     b.Property<double?>("Latitude")
+                        .IsRequired()
                         .HasColumnType("double precision")
                         .HasColumnName("latitude");
 
                     b.Property<double?>("Longitude")
+                        .IsRequired()
                         .HasColumnType("double precision")
                         .HasColumnName("longitude");
 
                     b.Property<string>("Status")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("text")
+                        .HasDefaultValue("pending")
                         .HasColumnName("status");
 
                     b.HasKey("Id")
                         .HasName("pk_events");
 
-                    b.HasIndex("IncidentId")
-                        .HasDatabaseName("ix_events_incident_id");
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_events_id");
 
-                    b.ToTable("events", (string)null);
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("SupersHerosCRM.Models.Hero", b =>
@@ -95,6 +148,11 @@ namespace SupersHerosCRM.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text")
                         .HasColumnName("email");
+
+                    b.Property<int[]>("IncidentId")
+                        .HasMaxLength(3)
+                        .HasColumnType("integer[]")
+                        .HasColumnName("incident_id");
 
                     b.Property<double?>("Latitude")
                         .HasColumnType("double precision")
@@ -194,33 +252,55 @@ namespace SupersHerosCRM.Migrations
                         });
                 });
 
-            modelBuilder.Entity("HeroIncident", b =>
+            modelBuilder.Entity("EventIncident", b =>
                 {
-                    b.HasOne("SupersHerosCRM.Models.Hero", null)
+                    b.HasOne("SupersHerosCRM.Models.Event", null)
                         .WithMany()
-                        .HasForeignKey("HeroesId")
+                        .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_hero_incident_heroes_heroes_id");
+                        .HasConstraintName("fk_event_incident_events_event_id");
 
                     b.HasOne("SupersHerosCRM.Models.Incident", null)
-                        .WithMany()
-                        .HasForeignKey("IncidentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_hero_incident_incidents_incidents_id");
-                });
-
-            modelBuilder.Entity("SupersHerosCRM.Models.Events", b =>
-                {
-                    b.HasOne("SupersHerosCRM.Models.Incident", "Incident")
                         .WithMany()
                         .HasForeignKey("IncidentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_events_incidents_incident_id");
+                        .HasConstraintName("fk_event_incident_incidents_incident_id");
+                });
 
-                    b.Navigation("Incident");
+            modelBuilder.Entity("HeroEvent", b =>
+                {
+                    b.HasOne("SupersHerosCRM.Models.Event", null)
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_hero_event_events_event_id");
+
+                    b.HasOne("SupersHerosCRM.Models.Hero", null)
+                        .WithMany()
+                        .HasForeignKey("HeroId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_hero_event_heroes_hero_id");
+                });
+
+            modelBuilder.Entity("HeroIncident", b =>
+                {
+                    b.HasOne("SupersHerosCRM.Models.Hero", null)
+                        .WithMany()
+                        .HasForeignKey("HeroId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_hero_incident_heroes_hero_id");
+
+                    b.HasOne("SupersHerosCRM.Models.Incident", null)
+                        .WithMany()
+                        .HasForeignKey("IncidentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_hero_incident_incidents_incident_id");
                 });
 #pragma warning restore 612, 618
         }

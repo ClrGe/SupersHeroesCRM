@@ -8,10 +8,12 @@ public class Event
 
     public double? Latitude { get; set; }
     public int IncidentId { get; set; }
-    public Incident? Incident { get; set; }
-    
+
+    public ICollection<Incident>? Incidents { get; set; }
+
     public int? HeroId { get; set; }
-    public Hero? Hero { get; set; }
+
+    public ICollection<Hero>? Heroes { get; set; }
 
     public string Status { get; set; }
     public DateTime? CreatedAt { get; set; }

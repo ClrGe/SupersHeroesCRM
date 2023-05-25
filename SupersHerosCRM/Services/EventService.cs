@@ -15,6 +15,7 @@ public class EventService : IEventService
         _context = context;
         _logger = logger;
     }
+
     public async Task<IEnumerable<Event>?> GetEventsAsync()
     {
         try
@@ -35,9 +36,8 @@ public class EventService : IEventService
         {
             if (includeRelations)
                 return await _context.Events
-                    .Include(c => c.Incident)
-                    .FirstOrDefaultAsync(c => c.Id == id);
-
+                    .Include(e => e.Incidents)
+                    .FirstOrDefaultAsync(e => e.Id == id);
             return await _context.Events.FindAsync(id);
         }
         catch (Exception ex)
@@ -72,6 +72,4 @@ public interface IEventService
     Task<IEnumerable<Event>?> GetEventsAsync();
     Task<Event?> GetEventAsync(int id, bool includeRelations = true);
     Task<Event?> AddEventAsync(Event @event);
-    
-    
 }
