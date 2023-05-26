@@ -29,7 +29,6 @@ public class SupersHerosCRMDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.HasIndex(e => e.Id);
-            // incidentId is a foreign key
             entity.Property(e => e.IncidentId);
             entity.HasMany(e => e.Incidents)
                 .WithMany(e => e.Heroes)

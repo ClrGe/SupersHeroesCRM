@@ -15,6 +15,6 @@ public class Event
 
     public ICollection<Hero>? Heroes { get; set; }
 
-    public string Status { get; set; }
+    public string? Status { get; set; }
     public DateTime? CreatedAt { get; set; }
 }

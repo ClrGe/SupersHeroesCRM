@@ -45,6 +45,8 @@ public class HeroController : ControllerBase
     public async Task<ActionResult<Hero>> AddHero(Hero hero)
     {
         var dbHero = await _heroService.AddHeroAsync(hero);
+        
+        
 
         if (dbHero == null)
             return StatusCode(StatusCodes.Status404NotFound, $"{hero.Name} could not be added.");

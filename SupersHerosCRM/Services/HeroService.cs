@@ -54,18 +54,15 @@ public class HeroService : IHeroService
         try
         {
             
-            /* add related incidents to join table HeroIncident with Hero array of incidents Ids
-            foreach (var incident in hero.Incidents)
+           // ensure name is unique
+            var existingHero = await _context.Heroes.FirstOrDefaultAsync(h => h.Name == hero.Name);
+            if (existingHero != null)
             {
-                var incidentFromDb = await _context.Incidents.FindAsync(incident.Id);
-                if (incidentFromDb != null)
-                {
-                    hero.Incidents.Add(incidentFromDb);
-                }
-            }*/
-            // add events to join table HeroEvent
-           
-            
+                _logger.Log(LogLevel.Information, $"Hero with name {hero.Name} already exists");
+                // send back failure to the controller
+                return null;
+                
+            }
             
             _context.Heroes.Add(hero);
             await _context.SaveChangesAsync();
